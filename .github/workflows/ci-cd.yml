@@ -32,25 +32,3 @@ jobs:
           IMAGE_TAG=${{ github.sha }}
           docker build -t ${{ secrets.DOCKER_USERNAME }}/devops-app:$IMAGE_TAG .
           docker push ${{ secrets.DOCKER_USERNAME }}/devops-app:$IMAGE_TAG
-
-  deploy:
-    name: Deploy Kubernetes
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install kubectl
-        uses: azure/setup-kubectl@v4
-
-      - name: Setup kubeconfig
-        run: |
-          mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
-
-      - name: Update image
-        run: |
-          kubectl set image deployment/flask-app \
-          flask-app=${{ secrets.DOCKER_USERNAME }}/devops-app:${{ github.sha }}
-
-      - name: Verify rollout
-        run: kubectl rollout status deployment/flask-app
