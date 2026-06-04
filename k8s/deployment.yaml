@@ -13,8 +13,19 @@ spec:
         app: flask-app
     spec:
       containers:
-        - name: flask-app
-          image: mzbokhit/devops-app:latest
-          imagePullPolicy: IfNotPresent
-          ports:
-            - containerPort: 5000
+      - name: flask-app
+        image: mzbokhit/devops-app:v2
+        ports:
+        - containerPort: 5000
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 15
+          periodSeconds: 20
