@@ -14,8 +14,8 @@ REQUEST_COUNT = Counter(
 def home():
     REQUEST_COUNT.labels(endpoint='/').inc()
     return jsonify({
-        "message": "Hello DevOps",
-       # "message": "Version 12 - DevOps Project ",
+        #"message": "Hello DevOps",
+        "message": "Version 12 - DevOps Project ",
         "status": "running"
     })
     
